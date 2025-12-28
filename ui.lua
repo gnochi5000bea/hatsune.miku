@@ -115,8 +115,6 @@
     )
 ]]
 
-local LoadingTick = os.clock()
-
 if getgenv().Library then
     getgenv().Library:Unload()
 end
@@ -8528,8 +8526,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
 
             function Label:SetText(Text)
-                Label.Name = Text
-                Items["Text"].Text = Label.Name
+                Items["Text"].Instance.Text = Text
             end
 
             function Label:SetVisibility(Bool)
