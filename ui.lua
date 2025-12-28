@@ -832,7 +832,9 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             Url = "https://github.com/gnochi5000bea/hatsune.miku/raw/refs/heads/main/assets/InterSemibold.ttf"
         })
 
-        Library.Font = CustomFont:Get("Inter")
+        Library.Font =  CustomFont:New("Inter", 200, "Regular", {
+            Url = "https://github.com/gnochi5000bea/hatsune.miku/raw/refs/heads/main/assets/InterSemibold.ttf"
+        }) --CustomFont:Get("Inter")
     end
 
     local Themes = {
