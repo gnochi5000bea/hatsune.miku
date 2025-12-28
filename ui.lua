@@ -115,9 +115,9 @@
     )
 ]]
 
-if getgenv().Library then
+--[[if getgenv().Library then
     getgenv().Library:Unload()
-end
+end]]
 
 -- beware of somewhat horrible code
 local Library do
@@ -960,7 +960,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 
         Library.Unloaded = true
         Library = nil 
-        getgenv().Library = nil
+        --getgenv().Library = nil
 
         UserInputService.MouseIconEnabled = true
     end
@@ -8826,5 +8826,5 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     end
 end 
 
-getgenv().Library = Library
+--getgenv().Unload = Library
 return Library
