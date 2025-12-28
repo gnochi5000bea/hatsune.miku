@@ -211,11 +211,11 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         },
 
         Folders = {
-            Directory = "hatsunemiku",
-            ConfigsDirectory = "hatsunemiku/Configs",
-            Configs = "hatsunemiku/Configs/" .. GameConfigFolderName,
-            Assets = "hatsunemiku/Assets",
-            Themes = "hatsunemiku/Themes"
+            Directory = "HatsuneMiku",
+            ConfigsDirectory = "HatsuneMiku/Configs",
+            Configs = "HatsuneMiku/Configs/" .. GameConfigFolderName,
+            Assets = "HatsuneMiku/Assets",
+            Themes = "HatsuneMiku/Themes"
         },
 
         Images = { -- you're welcome to reupload the images and replace it with your own links
@@ -254,6 +254,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         MainFrame = nil,
         Font = nil,
         KeyList = nil,
+        Unloaded = false
     }
 
     local Keys = {
@@ -959,10 +960,15 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             self.Holder:Clean()
         end
 
+        Library.Unloaded = true
         Library = nil 
         getgenv().Library = nil
 
         UserInputService.MouseIconEnabled = true
+    end
+
+    Library.GetFlag = function(self, Flag)
+        return Library.Flags[Flag]
     end
 
     Library.GetImage = function(self, Image)
