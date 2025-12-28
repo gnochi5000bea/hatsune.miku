@@ -3657,14 +3657,14 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                     end
                 end
 
-                local _1 = Dropdown:AddOption("toggle")
-                local _2 = Dropdown:AddOption("hold")
-                local _3 = Dropdown:AddOption("always")
+                local _1 = Dropdown:AddOption("Toggle")
+                local _2 = Dropdown:AddOption("Hold")
+                local _3 = Dropdown:AddOption("Always")
 
                 Modes = {
-                    ["toggle"] = _1,
-                    ["hold"] = _2,
-                    ["always"] = _3
+                    ["Toggle"] = _1,
+                    ["Hold"] = _2,
+                    ["Always"] = _3
                 }
 
                 local Debounce = false 
@@ -4023,8 +4023,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                         Keybind.Mode = Key.Mode
                         Keybind:SetMode(Key.Mode)
                     else
-                        Keybind.Mode = "toggle"
-                        Keybind:SetMode("toggle")
+                        Keybind.Mode = "Toggle"
+                        Keybind:SetMode("Toggle")
                     end
 
                     local KeyString = Keys[Keybind.Key] or StringGSub(tostring(RealKey), "Enum.", "") or RealKey
@@ -4040,7 +4040,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                     end
 
                     Update()
-                elseif TableFind({"toggle", "hold", "always"}, Key) then
+                elseif TableFind({"Toggle", "Hold", "Always"}, Key) then
                     Keybind.Mode = Key
                     Keybind:SetMode(Keybind.Mode)
 
@@ -4056,11 +4056,11 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
 
             function Keybind:Press(Bool)
-                if Keybind.Mode == "toggle" then 
+                if Keybind.Mode == "Toggle" then 
                     Keybind.Toggled = not Keybind.Toggled
-                elseif Keybind.Mode == "hold" then 
+                elseif Keybind.Mode == "Hold" then 
                     Keybind.Toggled = Bool
-                elseif Keybind.Mode == "always" then 
+                elseif Keybind.Mode == "Always" then 
                     Keybind.Toggled = true
                 end
 
@@ -4103,9 +4103,9 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 
             Library:Connect(UserInputService.InputBegan, function(Input)
                 if tostring(Input.KeyCode) == Keybind.Key or tostring(Input.UserInputType) == Keybind.Key and not Keybind.Value == "None" then
-                    if Keybind.Mode == "toggle" then 
+                    if Keybind.Mode == "Toggle" then 
                         Keybind:Press()
-                    elseif Keybind.Mode == "hold" then 
+                    elseif Keybind.Mode == "Hold" then 
                         Keybind:Press(true)
                     end
                 end
@@ -4125,7 +4125,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 
             Library:Connect(UserInputService.InputEnded, function(Input)
                 if tostring(Input.KeyCode) == Keybind.Key or tostring(Input.UserInputType) == Keybind.Key and not Keybind.Value == "None"  then
-                    if Keybind.Mode == "hold" then 
+                    if Keybind.Mode == "Hold" then 
                         Keybind:Press(false)
                     end
                 end
@@ -4136,7 +4136,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end)
 
             if Data.Default then
-               Keybind.Mode = Data.Mode or "toggle"
+               Keybind.Mode = Data.Mode or "Toggle"
                Modes[Keybind.Mode]:Set()
                Keybind:Set({Key = Data.Default, Mode = Data.Mode})
             end
@@ -8525,6 +8525,11 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                     Padding = UDimNew(0, 6),
                     SortOrder = Enum.SortOrder.LayoutOrder
                 })
+            end
+
+            function Label:SetText(Text)
+                Label.Name = Text
+                Items["Text"].Text = Label.Name
             end
 
             function Label:SetVisibility(Bool)
