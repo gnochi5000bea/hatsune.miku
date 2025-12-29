@@ -119,6 +119,8 @@
     getgenv().Library:Unload()
 end]]
 
+--local LoadingTick = os.clock()
+
 -- beware of somewhat horrible code
 local Library do
     -- Services
@@ -1419,7 +1421,15 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
 
             function Toggle:Set(Bool)
-                if not Data.Disabled then
+                if Data.Disabled then
+                    Library:Notification({
+                        Name = "Warning!",
+                        Description = Data.DisabledText,
+                        Duration = 5,
+                        Icon = "97118059177470",
+                        IconColor = Color3.fromRGB(255, 208, 120)
+                    })
+                else
                     Toggle.Value = Bool 
                     Library.Flags[Toggle.Flag] = Bool
                     
@@ -1442,14 +1452,6 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                         Items["Check"]:Tween(nil, {ImageTransparency = 1})
                         Items["Text"]:Tween(nil, {TextTransparency = 0.5})
                     end
-                else
-                    Library:Notification({
-                        Name = "Warning!",
-                        Description = Data.DisabledText,
-                        Duration = 5,
-                        Icon = "97118059177470",
-                        IconColor = Color3.fromRGB(255, 208, 120)
-                    })
                 end
 
                 if Data.Callback then 
@@ -7993,7 +7995,9 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                 Flag = Toggle.Flag,
                 Default = Toggle.Default,
                 Page = Toggle.Page,
-                Callback = Toggle.Callback
+                Callback = Toggle.Callback,
+                Disabled = Toggle.Disabled,
+                DisabledText = Toggle.DisabledText
             })
 
             ToggleItems["Toggle"]:Tooltip(Toggle.Tooltip)
@@ -8835,6 +8839,602 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         end
     end
 end 
+--[[
+-- Example
+do
+    local Window = Library:Window({
+        Name = "kiwisense",
+        Version = "v2.1",
+        Logo = "135215559087473",
+        FadeSpeed = 0.25,
+        --Size = UDim2.new(0, 659, 0, 511)
+    })
 
+    local Watermark = Library:Watermark("This is a watermark", "135215559087473")
+    Watermark:SetVisibility(false)
+    local KeybindList = Library:KeybindsList()
+    KeybindList:SetVisibility(false)
+
+    do
+        local Pages = {
+            ["Combat"] = Window:Page({
+                Name = "pvp", 
+                Icon = "111178525804834",
+                SubPages = true,
+            }),
+            
+            ["Visuals"] = Window:Page({
+                Name = "visuals", 
+                Icon = "115907015044719", 
+                Columns = 2
+            }),
+
+            ["Misc"] = Window:Page({
+                Name = "misc", 
+                Icon = "136623465713368", 
+                Columns = 2
+            }),
+
+            ["Movement"] = Window:Page({
+                Name = "movement", 
+                Icon = "109463522861706", 
+                Columns = 2
+            }),
+
+            ["Settings"] = Window:Page({
+                Name = "settings", 
+                Icon = "137300573942266", 
+                Columns = 2,
+                SubPages = true
+            })
+        }
+
+        do -- Misc
+            local Playerlist = Pages["Misc"]:Playerlist({
+                Callback = function(...)
+                    local Args = {...}
+                    table.foreach(Args, print)
+                end
+            })
+        end
+
+        do -- Combat
+            local Subpages = {
+                ["Aimbot"] = Pages["Combat"]:SubPage({
+                    Name = "aimbot", 
+                    Icon = "111386589037485", 
+                    Columns = 2
+                }),
+                ["Ragebot"] = Pages["Combat"]:SubPage({
+                    Name = "ragebot", 
+                    Icon = "126028986879491", 
+                    Columns = 2
+                }),
+            }
+
+            do
+                local GeneralSection = Subpages["Ragebot"]:Section({Name = "general", Icon = "103174889897193", Side = 1})
+                local GeneralSection2 = Subpages["Aimbot"]:Section({Name = "general2", Icon = "103174889897193", Side = 1})
+
+                do
+                    local Toggle1 = GeneralSection:Toggle({
+                        Name = "enabled",
+                        Flag = "enabled",
+                        Default = false,
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+                
+                    local Toggle2 = GeneralSection:Toggle({
+                        Name = "disabled test",
+                        Flag = "disabled test",
+                        Default = false,
+                        Disabled = true,
+                        DisabledText = "Disabled toggle",
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+
+                    GeneralSection:Label("Exotic Dealer", "Left"):Colorpicker({
+                        Name = "Colorpicker",
+                        Flag = "Colorpicker23",
+                        Default = Library.Theme.Accent,
+                        Alpha = 0,
+                        Callback = function(Color, Alpha)
+                            print(Color, Alpha)
+                        end
+                    })
+
+                    local Button = GeneralSection:Button({
+                        Name = "Button", 
+                        Callback = function()
+                            print("Pressed")
+                        end
+                    })
+
+                    local Slider = GeneralSection:Slider({
+                        Name = "Slider", 
+                        Flag = "Slider", 
+                        Min = 0, 
+                        Default = 0, 
+                        Max = 100, 
+                        Suffix = "%", 
+                        Decimals = 1, 
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+
+                    GeneralSection:Label("WhoreoeroeroeroeoreoreoreoreoroeroeoreoreoreoroeoroereWhoreoeroeroeroeoreoreoreoreoroeroeoreoreoreoroeoroere", "Left")
+
+                    local Dropdown = GeneralSection:Dropdown({
+                        Name = "Dropdown",
+                        Flag = "Dropdown",
+                        Items = { },
+                        Default = "One",
+                        MaxSize = 155,
+                        Multi = false,
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+
+                    Dropdown:AddOption("Black")
+                    Dropdown:AddOption("Black")
+                    Dropdown:AddOption("Black")
+
+
+                    local MultiDropdown = GeneralSection:Dropdown({
+                        Name = "Multi Dropdown",
+                        Flag = "MultiDropdown",
+                        Items = {"One", "Two", "Three"},
+                        Default = {"One", "Two"},
+                        MaxSize = 85,
+                        Multi = true,
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+
+                    local Label = GeneralSection:Label("Keybind", "Left")
+                    Label:Keybind({
+                        Name = "Keybind",
+                        Flag = "Keybind",
+                        Default = Enum.KeyCode.L,
+                        Mode = "Toggle",
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+
+                    local Toggle2 = GeneralSection:Toggle({
+                        Name = "enabled2",
+                        Flag = "enabled2",
+                        Default = false,
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    }):Keybind({
+                        Name = "Keybind2",
+                        Flag = "Keybind2",
+                        Default = Enum.KeyCode.RightAlt,
+                        Mode = "Toggle",
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+
+                    local Textbox = GeneralSection:Textbox({
+                        Name = "Textbox",
+                        Flag = "Textbox",
+                        Placeholder = "Placeholder",
+                        Default = "Text",
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+                end
+            end
+        end
+
+        do -- Settings
+            local Subpages = {
+                ["Configs"] = Pages["Settings"]:SubPage({
+                    Name = "configs", 
+                    Icon = "96491224522405", 
+                    Columns = 2
+                }),
+
+                ["Theming"] = Pages["Settings"]:SubPage({
+                    Name = "theming", 
+                    Icon = "103863157706913", 
+                    Columns = 2
+                }),
+
+                ["Configuration"] = Pages["Settings"]:SubPage({
+                    Name = "configuration", 
+                    Icon = "137300573942266", 
+                    Columns = 2
+                })
+            }
+
+            do -- Theming
+                local ThemingSection = Subpages["Theming"]:Section({Name = "theming", Icon = "103863157706913", Side = 1})
+                local ThemingProfiles = Subpages["Theming"]:Section({Name = "profiles", Icon = "96491224522405", Side = 2})
+                local AutoloadSection = Subpages["Theming"]:Section({Name = "autoload", Icon = "137623872962804", Side = 2})
+
+                for Index, Value in Library.Theme do 
+                    Library.ThemeColorpickers[Index] = ThemingSection:Label(Index, "Left"):Colorpicker({
+                        Name = "Colorpicker",
+                        Flag = "ColorpickerTheme" .. Index,
+                        Default = Value,
+                        Alpha = 0,
+                        Callback = function(Color, Alpha)
+                            Library.Theme[Index] = Color
+                            Library:ChangeTheme(Index, Color)
+                        end
+                    })
+                end
+
+                ThemingProfiles:Dropdown({
+                    Name = "preset themes",
+                    Items = { "Preset", "Halloween", "Aqua", "One Tap" },
+                    Default = "Preset",
+                    Multi = false,
+                    Callback = function(Value)
+                        local ThemeData = Library.Themes[Value]
+
+                        if not ThemeData then 
+                            return
+                        end
+
+                        for Index, Value in Library.Theme do 
+                            Library.Theme[Index] = ThemeData[Index]
+                            Library:ChangeTheme(Index, ThemeData[Index])
+
+                            Library.ThemeColorpickers[Index]:Set(ThemeData[Index])
+                        end
+
+                        task.wait(0.3)
+
+                        Library:Thread(function() -- i do this because sometimes the themes dont update
+                            for Index, Value in Library.Theme do 
+                                Library.Theme[Index] = Library.Flags["ColorpickerTheme" .. Index].Color
+                                Library:ChangeTheme(Index, Library.Flags["ColorpickerTheme" .. Index].Color)
+                            end    
+                        end)
+                    end
+                })
+
+                local ThemeSelected 
+                local ThemeName
+
+                do
+                    local ThemesDropdown = ThemingProfiles:Dropdown({
+                        Name = "themes", 
+                        Flag = "ThemesList", 
+                        Items = { }, 
+                        Multi = false,
+                        Callback = function(Value)
+                            ThemeSelected = Value
+                        end
+                    })
+
+                    ThemingProfiles:Textbox({
+                        Name = "theme name", 
+                        Default = "", 
+                        Flag = "ThemeName", 
+                        Placeholder = "enter text", 
+                        Callback = function(Value)
+                            ThemeName = Value
+                        end
+                    })
+
+                    ThemingProfiles:Button({
+                        Name = "save",
+                        Callback = function()
+                            if ThemeName and ThemeName ~= "" then
+                                writefile(Library.Folders.Themes .. "/" .. ThemeName .. ".json", Library:GetTheme())
+                                Library:RefreshThemesList(ThemesDropdown)
+                            end
+                        end
+                    })
+
+                    ThemingProfiles:Button({
+                        Name = "load",
+                        Callback = function()
+                            if ThemeSelected then
+                                local Success, Result = Library:LoadTheme(readfile(Library.Folders.Themes .. "/" .. ThemeSelected))
+
+                                if Success then 
+                                    Library:Notification({
+                                        Name = "Success",
+                                        Description = "Succesfully loaded theme: ".. ThemeSelected,
+                                        Duration = 5,
+                                        Icon = "116339777575852",
+                                        IconColor = Color3.fromRGB(52, 255, 164)
+                                    })
+
+                                    task.wait(0.3)
+
+                                    Library:Thread(function() -- i do this because sometimes the themes dont update
+                                        for Index, Value in Library.Theme do 
+                                            Library.Theme[Index] = Library.Flags["ColorpickerTheme" .. Index].Color
+                                            Library:ChangeTheme(Index, Library.Flags["ColorpickerTheme" .. Index].Color)
+                                        end    
+                                    end)
+                                else
+                                    Library:Notification({
+                                        Name = "Error!",
+                                        Description = "Failed to load theme, error:\n",
+                                        Duration = 5,
+                                        Icon = "97118059177470",
+                                        IconColor = Color3.fromRGB(255, 120, 120)
+                                    })
+                                end
+                            end
+                        end
+                    })
+
+                    AutoloadSection:Button({
+                        Name = "set selected theme as autoload",
+                        Callback = function()
+                            if ThemeSelected then 
+                                writefile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json", readfile(Library.Folders.Themes .. "/" .. ThemeSelected))
+                            end
+                        end
+                    })
+
+                    AutoloadSection:Button({
+                        Name = "set current theme as autoload",
+                        Callback = function()
+                            if ThemeSelected then 
+                                writefile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json", Library:GetTheme())
+                            end
+                        end
+                    })
+
+                    AutoloadSection:Button({
+                        Name = "remove autoload theme",
+                        Callback = function()
+                            writefile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json", "")
+                        end
+                    })
+
+                    Library:RefreshThemesList(ThemesDropdown)
+                end
+            end
+
+            do -- Configs
+                local ConfigsSection = Subpages["Configs"]:Section({Name = "profiles", Icon = "96491224522405", Side = 1})
+                local AutoloadSection = Subpages["Configs"]:Section({Name = "autoload", Icon = "137623872962804", Side = 2})
+
+                local ConfigSelected 
+                local ConfigName
+
+                do
+                    local ConfigsDropdown = ConfigsSection:Dropdown({
+                        Name = "configs", 
+                        Flag = "ConfigsList", 
+                        Items = { }, 
+                        Multi = false,
+                        Callback = function(Value)
+                            ConfigSelected = Value
+                        end
+                    })
+
+                    ConfigsSection:Textbox({
+                        Name = "config name", 
+                        Default = "", 
+                        Flag = "ConfigName", 
+                        Placeholder = "enter text", 
+                        Callback = function(Value)
+                            ConfigName = Value
+                        end
+                    })
+
+                    ConfigsSection:Button({
+                        Name = "create",
+                        Callback = function()
+                            if ConfigName and ConfigName ~= "" then
+                                writefile(Library.Folders.Configs .. "/" .. ConfigName .. ".json", Library:GetConfig())
+                                Library:RefreshConfigsList(ConfigsDropdown)
+                            end
+                        end
+                    })
+
+                    ConfigsSection:Button({
+                        Name = "delete",
+                        Callback = function()
+                            if ConfigSelected then
+                                Library:DeleteConfig(ConfigSelected)
+                                Library:RefreshConfigsList(ConfigsDropdown)
+                            end
+                        end
+                    })
+
+                    ConfigsSection:Button({
+                        Name = "load",
+                        Callback = function()
+                            if ConfigSelected then
+                                local Success, Result = Library:LoadConfig(readfile(Library.Folders.Configs .. "/" .. ConfigSelected))
+
+                                if Success then 
+                                    Library:Notification({
+                                        Name = "Success",
+                                        Description = "Succesfully loaded config: ".. ConfigSelected,
+                                        Duration = 5,
+                                        Icon = "116339777575852",
+                                        IconColor = Color3.fromRGB(52, 255, 164)
+                                    })
+
+                                    task.wait(0.3)
+
+                                    Library:Thread(function() -- i do this because sometimes the themes dont update
+                                        for Index, Value in Library.Theme do 
+                                            Library.Theme[Index] = Library.Flags["ColorpickerTheme" .. Index].Color
+                                            Library:ChangeTheme(Index, Library.Flags["ColorpickerTheme" .. Index].Color)
+                                        end    
+                                    end)
+                                else
+                                    Library:Notification({
+                                        Name = "Error!",
+                                        Description = "Failed to load config, error:\n",
+                                        Duration = 5,
+                                        Icon = "97118059177470",
+                                        IconColor = Color3.fromRGB(255, 120, 120)
+                                    })
+                                end
+                            end
+                        end
+                    })
+
+                    ConfigsSection:Button({
+                        Name = "save",
+                        Callback = function()
+                            if ConfigSelected then
+                                Library:SaveConfig(ConfigSelected)
+                            end
+                        end
+                    })
+
+                    ConfigsSection:Button({
+                        Name = "refresh list",
+                        Callback = function()
+                            Library:RefreshConfigsList(ConfigsDropdown)
+                        end
+                    })
+
+                    Library:RefreshConfigsList(ConfigsDropdown)
+                end
+
+                do
+                    AutoloadSection:Button({
+                        Name = "set selected config as autoload",
+                        Callback = function()
+                            if ConfigSelected then 
+                                writefile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json", readfile(Library.Folders.Configs .. "/" .. ConfigSelected))
+                            end
+                        end
+                    })
+
+                    AutoloadSection:Button({
+                        Name = "set current config as autoload",
+                        Callback = function()
+                            if ConfigSelected then 
+                                writefile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json", Library:GetConfig())
+                            end
+                        end
+                    })
+
+                    AutoloadSection:Button({
+                        Name = "remove autoload config",
+                        Callback = function()
+                            writefile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json", "")
+                        end
+                    })
+                end
+            end
+
+            do -- Configuration
+                local MenuSection = Subpages["Configuration"]:Section({Name = "menu", Icon = "93007870315593", Side = 1})
+                local TweeningSection = Subpages["Configuration"]:Section({Name = "tweening", Icon = "130045183204879", Side = 2})
+
+                do
+                    MenuSection:Label("menu keybind", "Left"):Keybind({
+                        Name = "MenuKeybind",
+                        Flag = "MenuKeybind",
+                        Mode = "Toggle",
+                        Default = Library.MenuKeybind,
+                        Callback = function()
+                            Library.MenuKeybind = Library.Flags["MenuKeybind"].Key
+                        end
+                    })
+
+                    MenuSection:Toggle({
+                        Name = "keybind list",
+                        Flag = "keybind list",
+                        Default = false,
+                        Callback = function(Value)
+                            KeybindList:SetVisibility(Value)
+                        end
+                    })
+
+                    MenuSection:Toggle({
+                        Name = "Global chat",
+                        Flag = "Global chat",
+                        Default = true,
+                        Callback = function(Value)
+                            ChatSystem:SetVisibility(Value)
+                        end
+                    })
+                    
+                    MenuSection:Toggle({
+                        Name = "watermark",
+                        Flag = "watermark",
+                        Default = false,
+                        Callback = function(Value)
+                            Watermark:SetVisibility(Value)
+                        end
+                    })
+
+                    MenuSection:Button({
+                        Name = "unload",
+                        Callback = function()
+                            Library:Unload()
+                        end
+                    })
+                end
+
+                do
+                    TweeningSection:Slider({
+                        Name = "time",
+                        Flag = "TweenTime",
+                        Default = Library.Tween.Time,
+                        Min = 0,
+                        Max = 5,
+                        Decimals = 0.01,
+                        Callback = function(Value)
+                            Library.Tween.Time = Value
+                        end
+                    })
+
+                    TweeningSection:Dropdown({
+                        Name = "style",
+                        Flag = "TweenStyle",
+                        Default = "Cubic",
+                        Items = {"Linear", "Sine", "Quad", "Cubic", "Quart", "Quint", "Exponential", "Circular", "Back", "Elastic", "Bounce"},
+                        MaxSize = 150,
+                        Callback = function(Value)
+                            Library.Tween.Style = Enum.EasingStyle[Value]
+                        end
+                    })
+
+                    TweeningSection:Dropdown({
+                        Name = "direction",
+                        Flag = "TweenDirection",
+                        MaxSize = 55,
+                        Default = "Out",
+                        Items = {"In", "Out", "InOut"},
+                        Callback = function(Value)
+                            Library.Tween.Direction = Enum.EasingDirection[Value]
+                        end
+                    })
+                end
+            end
+        end
+    end
+end
+
+Library:Notification({
+    Name = "Loaded",
+    Description = "Loaded library in: " .. string.format("%.4f", os.clock() - LoadingTick) .. " seconds",
+    Duration = 5
+})
+
+Library:Init() -- put this at the end of ur script or the autoload will not work
+]]
 --getgenv().Unload = Library
 return Library
