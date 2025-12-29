@@ -43,9 +43,6 @@
         Default/default: boolean
         Flag/flag: string
         Callback/callback: function
-		Tooltip/tooltip: string
-		Disabled/disabled: boolean
-		DisabledText/disabledtext: string
     )
 
     function Toggle:Keybind(
@@ -213,10 +210,10 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 
         Folders = {
             Directory = "HatsuneMiku",
-            ConfigsDirectory = "HatsuneMiku/Configs",
-            Configs = "HatsuneMiku/Configs/" .. GameConfigFolderName,
-            Assets = "HatsuneMiku/Assets",
-            Themes = "HatsuneMiku/Themes"
+            ConfigsDirectory = "HatsuneMiku\\Configs",
+            Configs = "HatsuneMiku\\Configs\\" .. GameConfigFolderName,
+            Assets = "HatsuneMiku\\Assets",
+            Themes = "HatsuneMiku\\Themes"
         },
 
         Images = { -- you're welcome to reupload the images and replace it with your own links
@@ -349,8 +346,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         local ImageName = ImageData[1]
         local ImageLink = ImageData[2]
         
-        if not isfile(Library.Folders.Assets .. "/" .. ImageName) then
-            writefile(Library.Folders.Assets .. "/" .. ImageName, game:HttpGet(ImageLink))
+        if not isfile(Library.Folders.Assets .. "\\" .. ImageName) then
+            writefile(Library.Folders.Assets .. "\\" .. ImageName, game:HttpGet(ImageLink))
         end
     end
 
@@ -802,12 +799,12 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 
     local CustomFont = { } do
         function CustomFont:New(Name, Weight, Style, Data)
-            if isfile(Library.Folders.Assets .. "/" .. Name .. ".json") then
-                return Font.new(getcustomasset(Library.Folders.Assets .. "/" .. Name .. ".json"))
+            if isfile(Library.Folders.Assets .. "\\" .. Name .. ".json") then
+                return Font.new(getcustomasset(Library.Folders.Assets .. "\\" .. Name .. ".json"))
             end
 
-            if not isfile(Library.Folders.Assets .. "/" .. Name .. ".ttf") then 
-                writefile(Library.Folders.Assets .. "/" .. Name .. ".ttf", game:HttpGet(Data.Url))
+            if not isfile(Library.Folders.Assets .. "\\" .. Name .. ".ttf") then 
+                writefile(Library.Folders.Assets .. "\\" .. Name .. ".ttf", game:HttpGet(Data.Url))
             end
 
             local FontData = {
@@ -816,18 +813,18 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                     name = "Regular",
                     weight = Weight,
                     style = Style,
-                    assetId = getcustomasset(Library.Folders.Assets .. "/" .. Name .. ".ttf")
+                    assetId = getcustomasset(Library.Folders.Assets .. "\\" .. Name .. ".ttf")
                 } }
             }
 
-            writefile(Library.Folders.Assets .. "/" .. Name .. ".json", HttpService:JSONEncode(FontData))
+            writefile(Library.Folders.Assets .. "\\" .. Name .. ".json", HttpService:JSONEncode(FontData))
 
-            return Font.new(getcustomasset(Library.Folders.Assets .. "/" .. Name .. ".json"))
+            return Font.new(getcustomasset(Library.Folders.Assets .. "\\" .. Name .. ".json"))
         end
 
         function CustomFont:Get(Name)
-            if isfile(Library.Folders.Assets .. "/" .. Name .. ".json") then
-                return Font.new(getcustomasset(Library.Folders.Assets .. "/" .. Name .. ".json"))
+            if isfile(Library.Folders.Assets .. "\\" .. Name .. ".json") then
+                return Font.new(getcustomasset(Library.Folders.Assets .. "\\" .. Name .. ".json"))
             end
         end
 
@@ -893,12 +890,12 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     Library.Theme = TableClone(Themes["Preset"])
     Library.Themes = Themes
 
-    if not isfile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json") then
-        writefile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json", "")
+    if not isfile(Library.Folders.Directory .. "\\AutoLoadConfig (do not modify this).json") then
+        writefile(Library.Folders.Directory .. "\\AutoLoadConfig (do not modify this).json", "")
     end
 
-    if not isfile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json") then
-        writefile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json", "")
+    if not isfile(Library.Folders.Directory .. "\\AutoLoadTheme (do not modify this).json") then
+        writefile(Library.Folders.Directory .. "\\AutoLoadTheme (do not modify this).json", "")
     end
 
     Library.Holder = Instances:Create("ScreenGui", {
@@ -977,7 +974,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             return
         end
 
-        return getcustomasset(self.Folders.Assets .. "/" .. ImageData[1])
+        return getcustomasset(self.Folders.Assets .. "\\" .. ImageData[1])
     end
 
     Library.Round = function(self, Number, Float)
@@ -1110,8 +1107,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     end
 
     Library.DeleteConfig = function(self, Config)
-        if isfile(Library.Folders.Configs .. "/" .. Config) then 
-            delfile(Library.Folders.Configs .. "/" .. Config)
+        if isfile(Library.Folders.Configs .. "\\" .. Config) then 
+            delfile(Library.Folders.Configs .. "\\" .. Config)
             Library:Notification({
                 Name = "Success",
                 Description = "Succesfully deleted config: ".. Config,
@@ -1123,8 +1120,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     end
 
     Library.SaveConfig = function(self, Config)
-        if isfile(Library.Folders.Configs .. "/" .. Config) then
-            writefile(Library.Folders.Configs .. "/" .. Config, Library:GetConfig())
+        if isfile(Library.Folders.Configs .. "\\" .. Config) then
+            writefile(Library.Folders.Configs .. "\\" .. Config, Library:GetConfig())
             Library:Notification({
                 Name = "Success",
                 Description = "Succesfully saved config: ".. Config,
@@ -1139,10 +1136,10 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         local CurrentList = { }
         local List = { }
 
-        local ConfigFolderName = StringGSub(Library.Folders.Configs, Library.Folders.ConfigsDirectory .. "/", "")
+        local ConfigFolderName = StringGSub(Library.Folders.Configs, Library.Folders.ConfigsDirectory .. "\\", "")
 
         for Index, Value in listfiles(Library.Folders.Configs) do
-            local FileName = StringGSub(Value, Library.Folders.ConfigsDirectory .. "/" .. ConfigFolderName .. "/", "")
+            local FileName = StringGSub(Value, Library.Folders.ConfigsDirectory .. "\\" .. ConfigFolderName .. "\\", "")
             List[Index] = FileName
         end
 
@@ -1232,8 +1229,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     end
 
     Library.DeleteTheme = function(self, Config)
-        if isfile(Library.Folders.Themes .. "/" .. Config) then 
-            delfile(Library.Folders.Themes .. "/" .. Config)
+        if isfile(Library.Folders.Themes .. "\\" .. Config) then 
+            delfile(Library.Folders.Themes .. "\\" .. Config)
             Library:Notification({
                 Name = "Success",
                 Description = "Succesfully deleted config: ".. Config .. ".json",
@@ -1245,8 +1242,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     end
 
     Library.SaveTheme = function(self, Config)
-        if isfile(Library.Folders.Themes .. "/" .. Config .. ".json") then
-            writefile(Library.Folders.Themes .. "/" .. Config .. ".json", Library:GetTheme())
+        if isfile(Library.Folders.Themes .. "\\" .. Config .. ".json") then
+            writefile(Library.Folders.Themes .. "\\" .. Config .. ".json", Library:GetTheme())
             Library:Notification({
                 Name = "Success",
                 Description = "Succesfully saved config: ".. Config .. ".json",
@@ -1261,10 +1258,10 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         local CurrentList = { }
         local List = { }
 
-        local ConfigFolderName = StringGSub(Library.Folders.Themes, Library.Folders.Directory .. "/", "")
+        local ConfigFolderName = StringGSub(Library.Folders.Themes, Library.Folders.Directory .. "\\", "")
 
         for Index, Value in listfiles(Library.Folders.Themes) do
-            local FileName = StringGSub(Value, Library.Folders.Directory .. "/" .. ConfigFolderName .. "/", "")
+            local FileName = StringGSub(Value, Library.Folders.Directory .. "\\" .. ConfigFolderName .. "\\", "")
             List[Index] = FileName
         end
 
@@ -8790,8 +8787,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     end
 
     Library.Init = function(self)
-        local AutoloadConfig = readfile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json")
-        local AutoloadTheme = readfile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json")
+        local AutoloadConfig = readfile(Library.Folders.Directory .. "\\AutoLoadConfig (do not modify this).json")
+        local AutoloadTheme = readfile(Library.Folders.Directory .. "\\AutoLoadTheme (do not modify this).json")
         
         if AutoloadConfig ~= "" then
             local Success, Result = Library:LoadConfig(AutoloadConfig)
