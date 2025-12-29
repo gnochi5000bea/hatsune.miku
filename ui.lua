@@ -43,6 +43,9 @@
         Default/default: boolean
         Flag/flag: string
         Callback/callback: function
+		Tooltip/tooltip: string
+		Disabled/disabled: boolean
+		DisabledText/disabledtext: string
     )
 
     function Toggle:Keybind(
@@ -1419,27 +1422,37 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
 
             function Toggle:Set(Bool)
-                Toggle.Value = Bool 
-                Library.Flags[Toggle.Flag] = Bool
+                if not Data.Disabled then
+                    Toggle.Value = Bool 
+                    Library.Flags[Toggle.Flag] = Bool
+                    
+                    if Bool then
+                        Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
+                        Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
 
-                if Bool then
-                    Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
-                    Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
+                        Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
+                        Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
 
-                    Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
-                    Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
+                        Items["Check"]:Tween(nil, {ImageTransparency = 0})
+                        Items["Text"]:Tween(nil, {TextTransparency = 0})
+                    else
+                        Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Element"})
+                        Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Element"})
 
-                    Items["Check"]:Tween(nil, {ImageTransparency = 0})
-                    Items["Text"]:Tween(nil, {TextTransparency = 0})
+                        Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
+                        Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
+
+                        Items["Check"]:Tween(nil, {ImageTransparency = 1})
+                        Items["Text"]:Tween(nil, {TextTransparency = 0.5})
+                    end
                 else
-                    Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Element"})
-                    Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Element"})
-
-                    Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
-                    Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
-
-                    Items["Check"]:Tween(nil, {ImageTransparency = 1})
-                    Items["Text"]:Tween(nil, {TextTransparency = 0.5})
+                    Library:Notification({
+                        Name = "Warning!",
+                        Description = Data.DisabledText,
+                        Duration = 5,
+                        Icon = "97118059177470",
+                        IconColor = Color3.fromRGB(255, 208, 120)
+                    })
                 end
 
                 if Data.Callback then 
@@ -7971,6 +7984,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                 Default = Data.Default or Data.default or false,
                 Callback = Data.Callback or Data.callback or function() end,
                 Tooltip = Data.Tooltip or Data.tooltip or nil,
+                Disabled = Data.Disabled or Data.disabled or false,
+                DisabledText = Data.DisabledText or Data.disabledtext or "Disabled",
 
                 Count = 0
             }
