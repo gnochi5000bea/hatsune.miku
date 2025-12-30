@@ -193,7 +193,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     getgenv().Options = { }
 
     local Games = {
-        [2682938349] = "WildHorseIslands"
+        [2682938349] = "WildHorseIslands",
+        [6926495846] = "DucklingsSim"
     }
 
     local GameConfigFolderName = Games[game.GameId] or "Universal"
