@@ -43,6 +43,8 @@
         Default/default: boolean
         Flag/flag: string
         Callback/callback: function
+        Disabled/disabled: boolean/function
+        DisabledText/disabledtext: string
     )
 
     function Toggle:Keybind(
@@ -1428,7 +1430,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
 
             function Toggle:Set(Bool)
-                if Data.Disabled then
+                if Data.Disabled or type(Data.Disabled) == "function" and Data.Disabled() then
                     Library:Notification({
                         Name = "Warning!",
                         Description = Data.DisabledText,
