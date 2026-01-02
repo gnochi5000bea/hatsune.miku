@@ -94,6 +94,8 @@
 
     function Section:Button(
         Name/name: string
+        Confirm/confirm: boolean
+        ConfirmTimeout/confirmtimeout: number
         Callback/callback: function
     )
 
@@ -8106,7 +8108,11 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                 Page = self.Page,
                 Section = self,
 
+                Confirming = false,
+
                 Name = Data.Name or Data.name or "Button",
+                Confirm = Data.Confirm or Data.confirm or false,
+                ConfirmTimeout = Data.ConfirmTimeout or Data.confirmtimeout or 3,
                 Callback = Data.Callback or Data.callback or function() end,
                 Tooltip = Data.Tooltip or Data.tooltip or nil
             }
@@ -8169,6 +8175,34 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
 
             function Button:Press()
+                if Data.Confirm then
+                    if not Button.Confirming then
+                        Button.Confirming = true
+                        Items["Text"].Instance.Text = "Confirm? (" .. tostring(Button.ConfirmTimeout) .. "s)"
+                        
+                        task.spawn(function()
+                            for i = Button.ConfirmTimeout, 1, -1 do
+                                if not Button.Confirming then break end
+
+                                Items["Text"].Instance.Text = "Confirm? (" .. i .. "s)"
+                                task.wait(1)
+                            end
+                        end)
+
+                        task.delay(Button.ConfirmTimeout, function()
+                            if Button.Confirming then
+                                Button.Confirming = false
+                                Items["Text"].Instance.Text = Button.Name
+                            end
+                        end)
+
+                        return
+                    else
+                        Button.Confirming = false
+                        Items["Text"].Instance.Text = Button.Name
+                    end
+                end
+
                 Items["Button"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
                 Items["Button"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
 
@@ -8856,7 +8890,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
         end
     end
-end 
+end
 --[[
 -- Example
 do
@@ -8970,6 +9004,15 @@ do
 
                     local Button = GeneralSection:Button({
                         Name = "Button", 
+                        Callback = function()
+                            print("Pressed")
+                        end
+                    })
+
+                    local ConfirmButton = GeneralSection:Button({
+                        Name = "Confirm Button", 
+                        Confirm = true,
+                        ConfirmTimeout = 5,
                         Callback = function()
                             print("Pressed")
                         end
