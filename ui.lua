@@ -8175,7 +8175,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
 
             function Button:Press()
-                if Data.Confirm then
+                if Button.Confirm then
                     if not Button.Confirming then
                         Button.Confirming = true
                         Items["Text"].Instance.Text = "Confirm? (" .. tostring(Button.ConfirmTimeout) .. "s)"
