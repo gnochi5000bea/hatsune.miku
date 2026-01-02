@@ -1430,37 +1430,46 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             end
 
             function Toggle:Set(Bool)
-                if Data.Disabled or type(Data.Disabled) == "function" and Data.Disabled() then
-                    Library:Notification({
-                        Name = "Warning!",
-                        Description = Data.DisabledText,
-                        Duration = 5,
-                        Icon = "97118059177470",
-                        IconColor = Color3.fromRGB(255, 208, 120)
-                    })
-                else
-                    Toggle.Value = Bool 
-                    Library.Flags[Toggle.Flag] = Bool
-                    
-                    if Bool then
-                        Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
-                        Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
-
-                        Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
-                        Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
-
-                        Items["Check"]:Tween(nil, {ImageTransparency = 0})
-                        Items["Text"]:Tween(nil, {TextTransparency = 0})
-                    else
-                        Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Element"})
-                        Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Element"})
-
-                        Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
-                        Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
-
-                        Items["Check"]:Tween(nil, {ImageTransparency = 1})
-                        Items["Text"]:Tween(nil, {TextTransparency = 0.5})
+                if Data.Disabled ~= nil then
+                    local IsDisabled = Data.Disabled
+                    if type(Data.Disabled) == "function" then
+                        IsDisabled = Data.Disabled()
                     end
+
+                    if IsDisabled then
+                        Library:Notification({
+                            Name = "Warning!",
+                            Description = Data.DisabledText,
+                            Duration = 5,
+                            Icon = "97118059177470",
+                            IconColor = Color3.fromRGB(255, 208, 120)
+                        })
+
+                        return
+                    end
+                end
+                
+                Toggle.Value = Bool 
+                Library.Flags[Toggle.Flag] = Bool
+                
+                if Bool then
+                    Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
+                    Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
+
+                    Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
+                    Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
+
+                    Items["Check"]:Tween(nil, {ImageTransparency = 0})
+                    Items["Text"]:Tween(nil, {TextTransparency = 0})
+                else
+                    Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Element"})
+                    Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Element"})
+
+                    Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
+                    Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
+
+                    Items["Check"]:Tween(nil, {ImageTransparency = 1})
+                    Items["Text"]:Tween(nil, {TextTransparency = 0.5})
                 end
 
                 if Data.Callback then 
@@ -7992,7 +8001,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
                 Default = Data.Default or Data.default or false,
                 Callback = Data.Callback or Data.callback or function() end,
                 Tooltip = Data.Tooltip or Data.tooltip or nil,
-                Disabled = Data.Disabled or Data.disabled or false,
+                Disabled = Data.Disabled or Data.disabled or nil,
                 DisabledText = Data.DisabledText or Data.disabledtext or "Disabled",
 
                 Count = 0
@@ -8934,15 +8943,18 @@ do
                             print(Value)
                         end
                     })
-                
+                    
+                    local Disabled = true
                     local Toggle2 = GeneralSection:Toggle({
                         Name = "disabled test",
                         Flag = "disabled test",
                         Default = false,
-                        Disabled = true,
+                        Disabled = function()
+                            return Disabled
+                        end,
                         DisabledText = "Disabled toggle",
                         Callback = function(Value)
-                            print(Value)
+                            -- print(Value)
                         end
                     })
 
