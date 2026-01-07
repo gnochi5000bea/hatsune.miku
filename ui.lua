@@ -1035,12 +1035,12 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             Function = Function,
             Callback = Callback,
             Name = Name,
-            FunctionHook = hookfunction(Function, newcclosure(Callback))
+            FunctionHook = nil
         }
 
-        --[[Library:Thread(function()
+        Library:Thread(function()
             NewHook.FunctionHook = hookfunction(Function, newcclosure(Callback))
-        end)]]
+        end)
 
         TableInsert(self.Hooks, NewHook)
         return NewHook
