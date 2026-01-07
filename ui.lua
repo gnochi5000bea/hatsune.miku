@@ -965,7 +965,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 
         for Index, Value in self.Hooks do 
             if Value.FunctionHook then 
-                restorefunction(Value.FunctionHook)
+                restorefunction(Value.Function)
             end
         end
 
