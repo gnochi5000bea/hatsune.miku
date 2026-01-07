@@ -241,6 +241,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         Sections = { },
 
         Connections = { },
+        Hooks = { },
         Threads = { },
 
         Themes = { },
@@ -257,6 +258,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         SetFlags = { },
 
         UnnamedConnections = 0,
+        UnnamedHooks = 0,
         UnnamedFlags = 0,
 
         Holder = nil,
@@ -961,6 +963,12 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             Value.Connection:Disconnect()
         end
 
+        for Index, Value in self.Hooks do 
+            if Value.FunctionHook then 
+                restorefunction(Value.FunctionHook)
+            end
+        end
+
         for Index, Value in self.Threads do 
             coroutine.close(Value)
         end
@@ -1018,6 +1026,24 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
         end
 
         return Success
+    end
+
+    Library.HookFunction = function(self, Function, Callback, Name)
+        Name = Name or StringFormat("Hooks%s%s", self.UnnamedHooks + 1, HttpService:GenerateGUID(false))
+
+        local NewHook = {
+            Function = Function,
+            Callback = Callback,
+            Name = Name,
+            FunctionHook = nil
+        }
+
+        Library:Thread(function()
+            NewHook.FunctionHook = hookfunction(Function, newcclosure(Callback))
+        end)
+
+        TableInsert(self.Hooks, NewHook)
+        return NewHook
     end
 
     Library.Connect = function(self, Event, Callback, Name)
