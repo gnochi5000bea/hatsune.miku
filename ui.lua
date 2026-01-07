@@ -900,6 +900,149 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             ["Accent"] = FromRGB(237, 170, 0),
             ["Border"] = FromRGB(0, 0, 0)
         },
+
+        ["Catppuccin"] = {
+            ["Background"] = FromRGB(36, 39, 58),
+            ["Inline"] = FromRGB(30, 32, 48),
+            ["Shadow"] = FromRGB(24, 25, 38),
+            ["Text"] = FromRGB(202, 211, 245),
+            ["Image"] = FromRGB(202, 211, 245),
+            ["Dark Gradient"] = FromRGB(165, 173, 203),
+            ["Inactive Text"] = FromRGB(128, 135, 162),
+            ["Element"] = FromRGB(54, 58, 79),
+            ["Accent"] = FromRGB(245, 169, 217),
+            ["Border"] = FromRGB(73, 77, 100)
+        },
+
+        ["Monokai"] = {
+            ["Background"] = FromRGB(39, 40, 34),
+            ["Inline"] = FromRGB(30, 31, 26),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(248, 248, 242),
+            ["Image"] = FromRGB(248, 248, 242),
+            ["Dark Gradient"] = FromRGB(190, 190, 180),
+            ["Inactive Text"] = FromRGB(117, 113, 94),
+            ["Element"] = FromRGB(73, 72, 62),
+            ["Accent"] = FromRGB(249, 38, 114),
+            ["Border"] = FromRGB(60, 60, 51)
+        },
+
+        ["Dracula"] = {
+            ["Background"] = FromRGB(40, 42, 54),
+            ["Inline"] = FromRGB(33, 34, 44),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(248, 248, 242),
+            ["Image"] = FromRGB(248, 248, 242),
+            ["Dark Gradient"] = FromRGB(200, 200, 195),
+            ["Inactive Text"] = FromRGB(98, 114, 164),
+            ["Element"] = FromRGB(68, 71, 90),
+            ["Accent"] = FromRGB(189, 147, 249),
+            ["Border"] = FromRGB(54, 57, 72)
+        },
+
+        ["BBot"] = {
+            ["Background"] = FromRGB(32, 30, 38),
+            ["Inline"] = FromRGB(26, 24, 32),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(200, 195, 210),
+            ["Image"] = FromRGB(200, 195, 210),
+            ["Dark Gradient"] = FromRGB(160, 155, 170),
+            ["Inactive Text"] = FromRGB(120, 115, 130),
+            ["Element"] = FromRGB(42, 40, 50),
+            ["Accent"] = FromRGB(155, 100, 210),
+            ["Border"] = FromRGB(50, 48, 60)
+        },
+
+        ["Fatality"] = {
+            ["Background"] = FromRGB(20, 20, 40),
+            ["Inline"] = FromRGB(15, 15, 32),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(200, 200, 220),
+            ["Image"] = FromRGB(200, 200, 220),
+            ["Dark Gradient"] = FromRGB(160, 160, 180),
+            ["Inactive Text"] = FromRGB(120, 120, 140),
+            ["Element"] = FromRGB(30, 30, 55),
+            ["Accent"] = FromRGB(255, 50, 120),
+            ["Border"] = FromRGB(40, 40, 65)
+        },
+
+        ["Jester"] = {
+            ["Background"] = FromRGB(20, 15, 30),
+            ["Inline"] = FromRGB(15, 10, 25),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(230, 220, 255),
+            ["Image"] = FromRGB(230, 220, 255),
+            ["Dark Gradient"] = FromRGB(180, 170, 200),
+            ["Inactive Text"] = FromRGB(130, 120, 150),
+            ["Element"] = FromRGB(35, 25, 50),
+            ["Accent"] = FromRGB(200, 50, 255),
+            ["Border"] = FromRGB(45, 35, 65)
+        },
+
+        ["Mint"] = {
+            ["Background"] = FromRGB(22, 30, 28),
+            ["Inline"] = FromRGB(16, 24, 22),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(220, 240, 235),
+            ["Image"] = FromRGB(220, 240, 235),
+            ["Dark Gradient"] = FromRGB(180, 200, 195),
+            ["Inactive Text"] = FromRGB(130, 160, 150),
+            ["Element"] = FromRGB(32, 44, 40),
+            ["Accent"] = FromRGB(80, 250, 180),
+            ["Border"] = FromRGB(40, 55, 50)
+        },
+
+        ["Tokyo Night"] = {
+            ["Background"] = FromRGB(26, 27, 38),
+            ["Inline"] = FromRGB(22, 23, 32),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(169, 177, 214),
+            ["Image"] = FromRGB(169, 177, 214),
+            ["Dark Gradient"] = FromRGB(140, 148, 180),
+            ["Inactive Text"] = FromRGB(86, 95, 137),
+            ["Element"] = FromRGB(36, 40, 59),
+            ["Accent"] = FromRGB(122, 162, 247),
+            ["Border"] = FromRGB(41, 46, 66)
+        },
+
+        ["Nord"] = {
+            ["Background"] = FromRGB(46, 52, 64),
+            ["Inline"] = FromRGB(39, 44, 55),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(216, 222, 233),
+            ["Image"] = FromRGB(216, 222, 233),
+            ["Dark Gradient"] = FromRGB(180, 186, 197),
+            ["Inactive Text"] = FromRGB(143, 152, 168),
+            ["Element"] = FromRGB(59, 66, 82),
+            ["Accent"] = FromRGB(136, 192, 208),
+            ["Border"] = FromRGB(67, 76, 94)
+        },
+
+        ["Quartz"] = {
+            ["Background"] = FromRGB(30, 35, 45),
+            ["Inline"] = FromRGB(24, 28, 36),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(180, 195, 210),
+            ["Image"] = FromRGB(180, 195, 210),
+            ["Dark Gradient"] = FromRGB(140, 155, 170),
+            ["Inactive Text"] = FromRGB(100, 115, 130),
+            ["Element"] = FromRGB(40, 46, 58),
+            ["Accent"] = FromRGB(100, 200, 230),
+            ["Border"] = FromRGB(50, 58, 72)
+        },
+
+        ["Material"] = {
+            ["Background"] = FromRGB(38, 38, 38),
+            ["Inline"] = FromRGB(30, 30, 30),
+            ["Shadow"] = FromRGB(0, 0, 0),
+            ["Text"] = FromRGB(238, 238, 238),
+            ["Image"] = FromRGB(238, 238, 238),
+            ["Dark Gradient"] = FromRGB(200, 200, 200),
+            ["Inactive Text"] = FromRGB(150, 150, 150),
+            ["Element"] = FromRGB(50, 50, 50),
+            ["Accent"] = FromRGB(100, 150, 255),
+            ["Border"] = FromRGB(60, 60, 60)
+        }
     }
 
     Library.Theme = TableClone(Themes["Preset"])
@@ -9170,8 +9313,9 @@ do
 
                 ThemingProfiles:Dropdown({
                     Name = "preset themes",
-                    Items = { "Preset", "Halloween", "Aqua", "One Tap" },
+                    Items = { "Preset", "Halloween", "Aqua", "One Tap", "Catppuccin", "Monokai", "Dracula", "BBot", "Fatality", "Jester", "Mint", "Tokyo Night", "Material", "Dracula", "Quartz", "Nord" },
                     Default = "Preset",
+                    MaxSize = 155,
                     Multi = false,
                     Callback = function(Value)
                         local ThemeData = Library.Themes[Value]
