@@ -123,20 +123,24 @@
     getgenv().Library:Unload()
 end]]
 
---local LoadingTick = os.clock()
+local LoadingTick = os.clock()
 
 -- beware of somewhat horrible code
+local Services = setmetatable({}, {__index = function(Self, Service)
+    return game:GetService(Service)
+end})
+
 local Library do
     -- Services
-local ChangeHistoryService = game:GetService("ChangeHistoryService")
-    local Players = game:GetService("Players")
-    local UserInputService = game:GetService("UserInputService")
-    local HttpService = game:GetService("HttpService")
-    local TweenService = game:GetService("TweenService")
-    local RunService = game:GetService("RunService")
-    local Workspace = game:GetService("Workspace")
-    local SoundService = cloneref and cloneref(game:GetService("SoundService")) or game:GetService("SoundService")
-    local CoreGui = cloneref and cloneref(game:GetService("CoreGui")) or game:GetService("CoreGui")
+local ChangeHistoryService = Services["ChangeHistoryService"]
+    local Players = Services["Players"]
+    local UserInputService = Services["UserInputService"]
+    local HttpService = Services["HttpService"]
+    local TweenService = Services["TweenService"]
+    local RunService = Services["RunService"]
+    local Workspace = Services["Workspace"]
+    local SoundService = Services["SoundService"]
+    local CoreGui = Services["CoreGui"]
 
     -- Variables
     local LocalPlayer = Players.LocalPlayer
@@ -221,6 +225,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             Direction = Enum.EasingDirection.Out
         },
 
+        FilePath = FilePath,
         Folders = {
             Directory = "HatsuneMiku",
             ConfigsDirectory = "HatsuneMiku" .. FilePath .. "Configs",
@@ -841,9 +846,11 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             if isfile(Library.Folders.Assets .. FilePath .. Name .. ".json") then
                 return Font.new(getcustomasset(Library.Folders.Assets .. FilePath .. Name .. ".json"))
             end
+
+            return
         end
 
-        Library.Font =  CustomFont:New("Inter", 200, "Regular", {
+        Library.Font =  CustomFont:New("InterSemibold", 200, "Regular", {
             Url = "https://github.com/gnochi5000bea/hatsune.miku/raw/refs/heads/main/assets/InterSemibold.ttf"
         })
     end
@@ -1048,8 +1055,8 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     Library.Theme = TableClone(Themes["Preset"])
     Library.Themes = Themes
 
-    if not isfile(Library.Folders.Directory .. FilePath .. "AutoLoadConfig (do not modify this).json") then
-        writefile(Library.Folders.Directory .. FilePath .. "AutoLoadConfig (do not modify this).json", "")
+    if not isfile(Library.Folders.Directory .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json") then
+        writefile(Library.Folders.Directory .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", "")
     end
 
     if not isfile(Library.Folders.Directory .. FilePath .. "AutoLoadTheme (do not modify this).json") then
@@ -1057,7 +1064,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     end
 
     Library.Holder = Instances:Create("ScreenGui", {
-        Parent = game:GetService("CoreGui"),
+        Parent = gethui(),
         Name = "\0",
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
         DisplayOrder = 2,
@@ -8845,6 +8852,89 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
             return Label 
         end
 
+        Library.Sections.Paragraph = function(self, Text, Alignment, Tooltip)
+            local Paragraph = {
+                Window = self.Window,
+                Page = self.Page,
+                Section = self,
+
+                Name = Text or "Paragraph",
+                Alignment = Alignment or "Left", 
+                
+                Count = 0
+            }
+
+            local Items = { } do
+                Items["Paragraph"] = Instances:Create("Frame", {
+                    Parent = Paragraph.Section.Items["Content"].Instance,
+                    BackgroundTransparency = 1,
+                    ZIndex = 2,
+                    Name = "\0",
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    Size = UDim2New(1, 0, 0, 20),
+                    AutomaticSize = Enum.AutomaticSize.Y,
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = FromRGB(255, 255, 255)
+                }) 
+
+                Items["Paragraph"]:Tooltip(Tooltip)
+
+                Items["Text"] = Instances:Create("TextLabel", {
+                    Parent = Items["Paragraph"].Instance,
+                    FontFace = Library.Font,
+                    TextColor3 = FromRGB(255, 255, 255),
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    ZIndex = 2,
+                    Text = Paragraph.Name,
+                    RichText = true,
+                    Name = "\0",
+                    Size = UDim2New(1, -16, 1, 0),
+                    TextWrapped = true,
+                    AutomaticSize = Enum.AutomaticSize.Y,
+                    BackgroundTransparency = 1,
+                    TextXAlignment = Enum.TextXAlignment[Paragraph.Alignment],
+                    Position = UDim2New(0, 8, 0, 0),
+                    BorderSizePixel = 0,
+                    TextSize = 14,
+                    BackgroundColor3 = FromRGB(255, 255, 255)
+                })  
+                
+                Items["Text"]:AddToTheme({TextColor3 = "Text"})
+
+                Instances:Create("UIPadding", {
+                    Parent = Items["Paragraph"].Instance,
+                    Name = "\0",
+                    PaddingTop = UDimNew(0, 8),
+                    PaddingBottom = UDimNew(0, 8),
+                    PaddingLeft = UDimNew(0, 8),
+                    PaddingRight = UDimNew(0, 8),
+                })
+            end
+
+            function Paragraph:SetText(Text)
+                Items["Text"].Instance.Text = Text
+            end
+
+            function Paragraph:SetVisibility(Bool)
+                Items["Paragraph"].Instance.Visible = Bool
+            end
+
+            local SearchData = {
+                Name = Paragraph.Name,
+                Item = Items["Paragraph"]
+            }
+
+            local PageSearchData = Library.SearchItems[Paragraph.Page]
+
+            if not PageSearchData then 
+                return 
+            end
+
+            TableInsert(PageSearchData, SearchData)
+
+            return Paragraph 
+        end
+
         Library.Sections.Textbox = function(self, Data)
             Data = Data or { }
 
@@ -9012,7 +9102,7 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
     end
 
     Library.Init = function(self)
-        local AutoloadConfig = readfile(Library.Folders.Directory .. FilePath .. "AutoLoadConfig (do not modify this).json")
+        local AutoloadConfig = readfile(Library.Folders.Directory .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json")
         local AutoloadTheme = readfile(Library.Folders.Directory .. FilePath .. "AutoLoadTheme (do not modify this).json")
         
         if AutoloadConfig ~= "" then
@@ -9062,6 +9152,13 @@ local ChangeHistoryService = game:GetService("ChangeHistoryService")
 end
 --[[
 -- Example
+local Services = setmetatable({}, {__index = function(Self, Service)
+    return game:GetService(Service)
+end})
+
+local Players = Services["Players"]
+local LocalPlayer = Players.LocalPlayer
+
 do
     local Window = Library:Window({
         Name = "kiwisense",
@@ -9320,7 +9417,7 @@ do
                     Callback = function(Value)
                         local ThemeData = Library.Themes[Value]
 
-                        if not ThemeData then 
+                        if not ThemeData then
                             return
                         end
 
@@ -9370,7 +9467,7 @@ do
                         Name = "save",
                         Callback = function()
                             if ThemeName and ThemeName ~= "" then
-                                writefile(Library.Folders.Themes .. "/" .. ThemeName .. ".json", Library:GetTheme())
+                                writefile(Library.Folders.Themes .. Library.FilePath .. ThemeName .. ".json", Library:GetTheme())
                                 Library:RefreshThemesList(ThemesDropdown)
                             end
                         end
@@ -9380,7 +9477,7 @@ do
                         Name = "load",
                         Callback = function()
                             if ThemeSelected then
-                                local Success, Result = Library:LoadTheme(readfile(Library.Folders.Themes .. "/" .. ThemeSelected))
+                                local Success, Result = Library:LoadTheme(readfile(Library.Folders.Themes .. Library.FilePath .. ThemeSelected))
 
                                 if Success then 
                                     Library:Notification({
@@ -9416,7 +9513,7 @@ do
                         Name = "set selected theme as autoload",
                         Callback = function()
                             if ThemeSelected then 
-                                writefile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json", readfile(Library.Folders.Themes .. "/" .. ThemeSelected))
+                                writefile(Library.Folders.Directory .. Library.FilePath .. "AutoLoadTheme (do not modify this).json", readfile(Library.Folders.Themes .. Library.FilePath .. ThemeSelected))
                             end
                         end
                     })
@@ -9425,7 +9522,7 @@ do
                         Name = "set current theme as autoload",
                         Callback = function()
                             if ThemeSelected then 
-                                writefile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json", Library:GetTheme())
+                                writefile(Library.Folders.Directory .. Library.FilePath .. "AutoLoadTheme (do not modify this).json", Library:GetTheme())
                             end
                         end
                     })
@@ -9433,7 +9530,7 @@ do
                     AutoloadSection:Button({
                         Name = "remove autoload theme",
                         Callback = function()
-                            writefile(Library.Folders.Directory .. "/AutoLoadTheme (do not modify this).json", "")
+                            writefile(Library.Folders.Directory .. Library.FilePath .. "AutoLoadTheme (do not modify this).json", "")
                         end
                     })
 
@@ -9473,7 +9570,7 @@ do
                         Name = "create",
                         Callback = function()
                             if ConfigName and ConfigName ~= "" then
-                                writefile(Library.Folders.Configs .. "/" .. ConfigName .. ".json", Library:GetConfig())
+                                writefile(Library.Folders.Configs .. Library.FilePath .. ConfigName .. ".json", Library:GetConfig())
                                 Library:RefreshConfigsList(ConfigsDropdown)
                             end
                         end
@@ -9493,7 +9590,7 @@ do
                         Name = "load",
                         Callback = function()
                             if ConfigSelected then
-                                local Success, Result = Library:LoadConfig(readfile(Library.Folders.Configs .. "/" .. ConfigSelected))
+                                local Success, Result = Library:LoadConfig(readfile(Library.Folders.Configs .. Library.FilePath .. ConfigSelected))
 
                                 if Success then 
                                     Library:Notification({
@@ -9549,7 +9646,7 @@ do
                         Name = "set selected config as autoload",
                         Callback = function()
                             if ConfigSelected then 
-                                writefile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json", readfile(Library.Folders.Configs .. "/" .. ConfigSelected))
+                                writefile(Library.Folders.Directory .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", readfile(Library.Folders.Configs .. Library.FilePath .. ConfigSelected))
                             end
                         end
                     })
@@ -9558,7 +9655,7 @@ do
                         Name = "set current config as autoload",
                         Callback = function()
                             if ConfigSelected then 
-                                writefile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json", Library:GetConfig())
+                                writefile(Library.Folders.Directory .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", Library:GetConfig())
                             end
                         end
                     })
@@ -9566,7 +9663,7 @@ do
                     AutoloadSection:Button({
                         Name = "remove autoload config",
                         Callback = function()
-                            writefile(Library.Folders.Directory .. "/AutoLoadConfig (do not modify this).json", "")
+                            writefile(Library.Folders.Directory .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", "")
                         end
                     })
                 end
@@ -9593,15 +9690,6 @@ do
                         Default = false,
                         Callback = function(Value)
                             KeybindList:SetVisibility(Value)
-                        end
-                    })
-
-                    MenuSection:Toggle({
-                        Name = "Global chat",
-                        Flag = "Global chat",
-                        Default = true,
-                        Callback = function(Value)
-                            ChatSystem:SetVisibility(Value)
                         end
                     })
                     
