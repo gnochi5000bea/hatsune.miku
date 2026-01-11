@@ -1127,6 +1127,10 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
             self.Holder:Clean()
         end
 
+        if getgenv().ESP then
+            getgenv().ESP.Unload()
+        end
+
         Library.Unloaded = true
         Library = nil 
         --getgenv().Library = nil
@@ -5731,7 +5735,7 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
             end)
 
             Items["Messages"]:Connect("ChildAdded", function()
-                wait() -- wait so we ensure the child is added
+                task.wait() -- wait so we ensure the child is added
                 Items["Messages"]:Tween(nil, {CanvasPosition = Vector2New(0, Items["Messages"].Instance.AbsoluteCanvasSize.Y - Items["Messages"].Instance.AbsoluteSize.Y)})
             end)
 
