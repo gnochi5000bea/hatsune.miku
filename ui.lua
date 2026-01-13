@@ -235,6 +235,7 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
             Directory = "HatsuneMiku",
             ConfigsDirectory = "HatsuneMiku" .. FilePath .. "Configs",
             Configs = "HatsuneMiku" .. FilePath .. "Configs" .. FilePath .. GameConfigFolderName,
+            Autoloads = "HatsuneMiku" .. FilePath .. "Autoloads" .. FilePath .. GameConfigFolderName,
             Assets = "HatsuneMiku" .. FilePath .. "Assets",
             Themes = "HatsuneMiku" .. FilePath .. "Themes"
         },
