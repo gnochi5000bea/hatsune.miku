@@ -1061,8 +1061,8 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
     Library.Theme = TableClone(Themes["Preset"])
     Library.Themes = Themes
 
-    if not isfile(Library.Folders.Directory .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json") then
-        writefile(Library.Folders.Directory .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", "")
+    if not isfile(Library.Folders.Autoloads .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json") then
+        writefile(Library.Folders.Autoloads .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", "")
     end
 
     if not isfile(Library.Folders.Directory .. FilePath .. "AutoLoadTheme (do not modify this).json") then
@@ -6041,7 +6041,7 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
                     FontFace = Library.Font,
                     TextColor3 = FromRGB(255, 255, 255),
                     BorderColor3 = FromRGB(0, 0, 0),
-                    Text = "keybinds",
+                    Text = "Keybinds",
                     Size = UDim2New(0, 0, 0, 15),
                     Position = UDim2New(0, 28, 0, 3),
                     BackgroundTransparency = 1,
@@ -9112,7 +9112,7 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
     end
 
     Library.Init = function(self)
-        local AutoloadConfig = readfile(Library.Folders.Directory .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json")
+        local AutoloadConfig = readfile(Library.Folders.Autoloads .. FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json")
         local AutoloadTheme = readfile(Library.Folders.Directory .. FilePath .. "AutoLoadTheme (do not modify this).json")
         
         if AutoloadConfig ~= "" then
@@ -9656,7 +9656,7 @@ do
                         Name = "set selected config as autoload",
                         Callback = function()
                             if ConfigSelected then 
-                                writefile(Library.Folders.Directory .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", readfile(Library.Folders.Configs .. Library.FilePath .. ConfigSelected))
+                                writefile(Library.Folders.Autoloads .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", readfile(Library.Folders.Configs .. Library.FilePath .. ConfigSelected))
                             end
                         end
                     })
@@ -9665,7 +9665,7 @@ do
                         Name = "set current config as autoload",
                         Callback = function()
                             if ConfigSelected then 
-                                writefile(Library.Folders.Directory .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", Library:GetConfig())
+                                writefile(Library.Folders.Autoloads .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", Library:GetConfig())
                             end
                         end
                     })
@@ -9673,7 +9673,7 @@ do
                     AutoloadSection:Button({
                         Name = "remove autoload config",
                         Callback = function()
-                            writefile(Library.Folders.Directory .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", "")
+                            writefile(Library.Folders.Autoloads .. Library.FilePath .. LocalPlayer.Name .. "-AutoLoadConfig (do not modify this).json", "")
                         end
                     })
                 end
