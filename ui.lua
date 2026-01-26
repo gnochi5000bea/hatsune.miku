@@ -101,6 +101,7 @@
 
     function Section:Label(Name: string, Alignment: string)
 
+    function Section:Paragraph(Text: string, Alignment: string)
     
     function Label:Keybind(
         Name/name: string
@@ -8898,27 +8899,18 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
                     Text = Paragraph.Name,
                     RichText = true,
                     Name = "\0",
-                    Size = UDim2New(1, -16, 1, 0),
+                    Size = UDim2New(1, 0, 1, 0),
                     TextWrapped = true,
                     AutomaticSize = Enum.AutomaticSize.Y,
                     BackgroundTransparency = 1,
                     TextXAlignment = Enum.TextXAlignment[Paragraph.Alignment],
-                    Position = UDim2New(0, 8, 0, 0),
+                    Position = UDim2New(0, 0, 0, 0),
                     BorderSizePixel = 0,
                     TextSize = 14,
                     BackgroundColor3 = FromRGB(255, 255, 255)
                 })  
                 
                 Items["Text"]:AddToTheme({TextColor3 = "Text"})
-
-                Instances:Create("UIPadding", {
-                    Parent = Items["Paragraph"].Instance,
-                    Name = "\0",
-                    PaddingTop = UDimNew(0, 8),
-                    PaddingBottom = UDimNew(0, 8),
-                    PaddingLeft = UDimNew(0, 8),
-                    PaddingRight = UDimNew(0, 8),
-                })
             end
 
             function Paragraph:SetText(Text)
@@ -9151,7 +9143,7 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
             else
                 Library:Notification({
                     Name = "Error!",
-                    Description = "Failed to load autoload theme, error:\n" .. Result,
+                    Description = "Failed to load autoload theme, error:\n" .. Result or "Failed to get reason.",
                     Duration = 5,
                     Icon = "97118059177470",
                     IconColor = Color3.fromRGB(255, 120, 120)
@@ -9243,6 +9235,19 @@ do
             do
                 local GeneralSection = Subpages["Ragebot"]:Section({Name = "general", Icon = "103174889897193", Side = 1})
                 local GeneralSection2 = Subpages["Aimbot"]:Section({Name = "general2", Icon = "103174889897193", Side = 1})
+
+                do
+                    GeneralSection2:Toggle({
+                        Name = "enabled",
+                        Flag = "enabled2",
+                        Default = false,
+                        Callback = function(Value)
+                            print(Value)
+                        end
+                    })
+
+                    GeneralSection2:Paragraph("Capture animals: 1\nMine resources: 2\nHarvest items: 3\nCollect items: 4\nFishing: 5\nFind buried treasure: 6")
+                end
 
                 do
                     local Toggle1 = GeneralSection:Toggle({
