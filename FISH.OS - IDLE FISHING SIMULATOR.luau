@@ -155,6 +155,8 @@ local NumberSequenceKeypointNew: (number, number, number?) -> NumberSequenceKeyp
 
 repeat Wait() until game:IsLoaded()
 
+local LoadingTick = Clock()
+
 local HttpService: HttpService = Services["HttpService"]
 local CoreGui: CoreGui = Services["CoreGui"]
 local CollectionService: CollectionService = Services["CollectionService"]
@@ -2077,7 +2079,8 @@ Library:Connect(RunService.Heartbeat, function(DT)
         Miku["Cache"]["_statuses"]["Auto-expedition"] = false
     end
 
-    if (Library:GetFlag("Auto-equip enabled") and not Miku["Cache"]["_statuses"]["Auto-equip"]) then
+    if (Library:GetFlag("Auto-equip enabled") and not Miku["Cache"]["_statuses"]["Auto-equip"] and (Tick() - Miku["Cache"]["_time"]["Auto equip"] >= Library:GetFlag("Auto-equip interval") * 60)) then
+        Miku["Cache"]["_time"]["Auto equip"] = Tick()
         Miku["Cache"]["_statuses"]["Auto-equip"] = true
 
         local FishTargetStat = Miku["Game"]["Mappings"]["Buff Types"][Library:GetFlag("Fish target stat")]
@@ -2261,5 +2264,11 @@ Library:Connect(LocalPlayer.Idled, function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vec2(0, 0))
 end, "Anti afk")
+
+Library:Notification({
+    Name = "Loaded",
+    Description = "Loaded library in: " .. string.format("%.4f", Clock() - LoadingTick) .. " seconds",
+    Duration = 5
+})
 
 Library:Init()
