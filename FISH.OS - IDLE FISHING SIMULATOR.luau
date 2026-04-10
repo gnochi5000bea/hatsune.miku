@@ -715,10 +715,9 @@ end
 local function GetDecorationBuffValue(Treasure, TargetStat)
     if Treasure.buffType ~= TargetStat then return 0 end
 
-    local Base = (Treasure.buffValue or 0) * (Treasure.conditionMult or 1)
-    local Enchant = Treasure.enchantmentBonus or 0
+    local Buff = (Treasure.buffValue or 0)
 
-    return Base + Enchant
+    return Buff
 end
 
 local function ProcessBoat(Boat, Coins)
@@ -802,6 +801,8 @@ local function AutoEquip(FishTargetStat, DecorationTargetStat)
         end
     end
 
+    Data = GetAquarium:InvokeServer()
+
     local ScoredFish = {}
     local ScoredTreasures = {}
 
@@ -813,7 +814,7 @@ local function AutoEquip(FishTargetStat, DecorationTargetStat)
     
     for _, Treasure in ipairs(Data.treasureInventory) do
         local Score = GetDecorationBuffValue(Treasure, DecorationTargetStat)
-
+        
         Insert(ScoredTreasures, { Treasure = Treasure, Score = Score })
     end
 
