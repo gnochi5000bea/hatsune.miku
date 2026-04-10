@@ -940,12 +940,6 @@ do
                 SubPages = true,
             }),
 
-            ["Modifications"] = Window:Page({
-                Name = "Modifications", 
-                Icon = "111178525804834", 
-                Columns = 2
-            }),
-
             ["Settings"] = Window:Page({
                 Name = "Settings", 
                 Icon = "137300573942266", 
@@ -1006,12 +1000,6 @@ do
                     Columns = 2
                 }),
 
-                ["Miscellaneous"] = Pages["Main"]:SubPage({
-                    Name = "Miscellaneous",
-                    Icon = "10709782582", 
-                    Columns = 2
-                }),
-
                 ["Webhook"] = Pages["Main"]:SubPage({
                     Name = "Webhook",
                     Icon = "10734943902", 
@@ -1022,7 +1010,7 @@ do
             if not LPH_OBFUSCATED then
                 Subpages["Debug"] = Pages["Main"]:SubPage({
                     Name = "Debug",
-                    Icon = "10734943902",
+                    Icon = "10709782845",
                     Columns = 1
                 })
             end
@@ -1199,10 +1187,6 @@ do
                             
                         end
                     })
-                end
-
-                do -- Miscellaneous
-                    
                 end
 
                 do -- Webhook
