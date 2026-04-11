@@ -699,25 +699,25 @@ local function GetBestEquipment(Boat, Coins)
 end
 
 local function GetFishBuffValue(Fish, TargetStat)
-    local Total = 0
+    local Totals = {}
 
-    if Fish.buffType == TargetStat then
-        Total = Total + (Fish.buff or 0)
+    if Fish.buffType and Fish.buff then
+        Totals[Fish.buffType] = (Totals[Fish.buffType] or 0) + Fish.buff
     end
 
     if Fish.modifiers and Fish.modifiers.statBonuses then
-        Total = Total + (Fish.modifiers.statBonuses[TargetStat] or 0)
+        for Stat, Value in Fish.modifiers.statBonuses do
+            Totals[Stat] = (Totals[Stat] or 0) + Value
+        end
     end
 
-    return Total
+    return Totals[TargetStat] or 0
 end
 
 local function GetDecorationBuffValue(Treasure, TargetStat)
     if Treasure.buffType ~= TargetStat then return 0 end
 
-    local Buff = (Treasure.buffValue or 0)
-
-    return Buff
+    return (Treasure.buffValue or 0) * (Treasure.conditionMult or 1) * (1 + (Treasure.enchantmentBonus or 0))
 end
 
 local function ProcessBoat(Boat, Coins)
