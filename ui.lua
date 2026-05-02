@@ -210,7 +210,8 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
         -- [] = "Dig",
         [5750914919] = "Fisch",
         [6802522764] = "TheLegendarySwordsRPG",
-		[9844978459] = "FishOS"
+		[9844978459] = "FishOS",
+		[9792947201] = "SlimeRNG
     }
 
     local GameConfigFolderName = Games[game.GameId] or "Universal"
