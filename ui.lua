@@ -861,7 +861,7 @@ local ChangeHistoryService = Services["ChangeHistoryService"]
         end
 
         Library.Font =  CustomFont:New("InterSemibold", 200, "Regular", {
-            Url = "https://github.com/gnochi5000bea/hatsune.miku/raw/refs/heads/main/assets/InterSemibold.ttf"
+            Url = "https://github.com/sametexe001/luas/raw/refs/heads/main/fonts/InterSemibold.ttf"
         })
     end
 
